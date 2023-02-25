@@ -1,26 +1,35 @@
 CC=gcc
 src = ./src
-DSPath=./DS/src
+DSPath=./src/DS
 stackPath=$(DSPath)/stack
 testPath=$(src)/test
 regexPath=$(src)/regex
+buildDir = ./build
 
-test: $(stackPath)/stack.o $(testPath)/testStack.o $(testPath)/mainTest.o $(src)/regex.o
-	$(CC) $(stackPath)/stack.o $(testPath)/testStack.o $(testPath)/mainTest.o $(src)/regex.o -o $(testPath)/runTest
+all:prebuild
 
-stack: $(stackPath)/stack.c
-	$(CC) -c $(stackPath)/stack.c
+prebuild:
+	mkdir -p $(buildDir)
 
-regex: $(src)/regex.c
-	$(CC) -c $(src)/regex.c
+runTest: prebuild stack.o testStack.o mainTest.o regexTest.o regex.o
+	$(CC) $(buildDir)/stack.o $(buildDir)/testStack.o $(buildDir)/mainTest.o $(buildDir)/regex.o $(buildDir)/regexTest.o -o $(buildDir)/runTest
 
-testStack: $(testPath)/testStack.c
-	$(CC) -c $(testPath)/testStack.c
+stack.o: $(stackPath)/stack.c $(stackPath)/stack.h
+	$(CC) -c $(stackPath)/stack.c -o $(buildDir)/stack.o
 
-mainTest: $(testPath)/mainTest.c
-	$(CC) -c $(testPath)/mainTest.c
+regex.o: $(src)/regex.c $(src)/regex.h
+	$(CC) -c $(src)/regex.c -o $(buildDir)/regex.o
+
+testStack.o: $(testPath)/testStack.c $(testPath)/testStack.h
+	$(CC) -c $(testPath)/testStack.c -o $(buildDir)/testStack.o
+
+regexTest.o: $(testPath)/regexTest.c $(testPath)/regexTest.h
+	$(CC) -c $(testPath)/regexTest.c -o $(buildDir)/regexTest.o
+
+mainTest.o: $(testPath)/mainTest.c
+	$(CC) -c $(testPath)/mainTest.c -o $(buildDir)/mainTest.o
 
 
 
 clean:
-	rm $(stackPath)/stack.o $(testPath)/testStack.o $(testPath)/mainTest.o
+	rm -rf build

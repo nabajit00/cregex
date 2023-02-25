@@ -13,4 +13,10 @@ struct CharStruct{
 };
 typedef struct CharStruct CharStruct;
 
+void addChar(CharStruct *cs,char ch,char isSpecial,int pos);
+
+void freeCharStruct(CharStruct *charStruct);
+CharStruct* newCharStruct(int len);
+get(CharStruct* charStruct,int pos);
+
 #endif

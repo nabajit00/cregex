@@ -1,11 +1,18 @@
 #include<assert.h>
 #include "../char.h"
 #include "../regex.h"
+#include<stdlib.h>
+#include<stdio.h>
 void validateStringTest(){
-    CharStruct cs = validateString("");
+    //TODO: complete the testcases
+    CharStruct *cs = validateString("");
     assert(cs==NULL);
-}
-
-void validateRegEx(){
-    validateStringTest();
+    freeCharStruct(cs);
+    cs = validateString("ab*(a|b)");
+    assert(cs != NULL);
+    cs = validateString("ab*(a|b)");
+    assert(cs != NULL);
+    cs = validateString("ab*((a|b)");
+    assert(cs == NULL);
+    printf("%s",getLastError());
 }

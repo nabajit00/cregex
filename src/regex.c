@@ -2,6 +2,8 @@
 #include "regex.h"
 #include <stdlib.h>
 #include<string.h>
+#include<stdio.h>
+#include "util.h"
 
 char message[100];
 
@@ -17,45 +19,55 @@ CharStruct* validateString(char* str){
         return NULL;
         strncpy(message,"Empty String",100);
     }
-    CharStruct *charStruct = malloc(sizeof(CharStruct));
-    charStruct->chars = malloc(sizeof(char)*len);
+
+    CharStruct* charStruct = newCharStruct(len);
 
     int i=0;
     int danglingBrackets = 0;
+
+    if(isOperator(str[0])){
+        snprintf(message,100,"Can't start with %c",str[0]);
+        freeCharStruct(charStruct);
+        return NULL;
+    }
+
     for(;i<len;i++){
         if(str[i]=='/'){
             //Escaped char next char no matter what will be no special
             if(i<len - 1){
-                charStruct->chars[i] = newChar(str[i++],0);
+                addChar(charStruct,str[i],0,i);
             }else{
                 snprintf(message,100,"Dangling escape char '//' in position %d",i);
-                free(charStruct);
+                freeCharStruct(charStruct);
                 return NULL;
             }
         } else{
             if(str[i] == '('){
                 danglingBrackets++;
-                charStruct->chars[i] = newChar(str[i],1);
+                addChar(charStruct,str[i],1,i);
             } else if(str[i] == ')'){
                 if(danglingBrackets == 0){
                     snprintf(message,100,"Mismatched ')' in position %d",i);
-                    free(charStruct);
+                    freeCharStruct(charStruct);
                     return NULL;
                 }
                 danglingBrackets--;
-                charStruct->chars[i] = newChar(str[i],1);
+                addChar(charStruct,str[i],1,i);
             } else if(str[i]=='*' || str[i]=='|'){
-                charStruct->chars[i] = newChar(str[i],1);
+                addChar(charStruct,str[i],1,i);
             } else{
-                charStruct->chars[i] = newChar(str[i],0);
+                addChar(charStruct,str[i],0,i);
             }
         }
     }
     if(danglingBrackets){
         strncpy(message,"Mismatched brackets",100);
-        free(charStruct);
+        freeCharStruct(charStruct);
         return NULL;
     }
+
+    if(c)
+
     return charStruct;
 }
 
@@ -67,13 +79,6 @@ Parser* constructRegex(char* str){
     }
 }
 
-const char* getError(){
+const char* getLastError(){
     return message;
-}
-
-Char newChar(char ch,char isSpecial){
-    Char charT;
-    charT.ch = ch;
-    charT.isSpecial = isSpecial;
-    return charT;
 }
