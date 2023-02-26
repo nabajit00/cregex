@@ -1,6 +1,7 @@
 #ifndef POSTFIX_H
 #define POSTFIX_H
 
-char* toPostfix(const char* string);
+#include "./char.h"
+CharStruct* toPostfix(CharStruct* string);
 
 #endif

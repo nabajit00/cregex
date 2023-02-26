@@ -14,5 +14,4 @@ void validateStringTest(){
     assert(cs != NULL);
     cs = validateString("ab*((a|b)");
     assert(cs == NULL);
-    printf("%s",getLastError());
 }

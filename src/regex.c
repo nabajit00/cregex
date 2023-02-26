@@ -35,16 +35,17 @@ CharStruct* validateString(char* str){
         if(str[i]=='/'){
             //Escaped char next char no matter what will be no special
             if(i<len - 1){
-                addChar(charStruct,str[i],0,i);
+                addChar(charStruct,str[i+1],0);
+                i++;
             }else{
-                snprintf(message,100,"Dangling escape char '//' in position %d",i);
+                snprintf(message,100,"Dangling escape char '\\' in position %d",i);
                 freeCharStruct(charStruct);
                 return NULL;
             }
         } else{
             if(str[i] == '('){
                 danglingBrackets++;
-                addChar(charStruct,str[i],1,i);
+                addChar(charStruct,str[i],1);
             } else if(str[i] == ')'){
                 if(danglingBrackets == 0){
                     snprintf(message,100,"Mismatched ')' in position %d",i);
@@ -52,11 +53,11 @@ CharStruct* validateString(char* str){
                     return NULL;
                 }
                 danglingBrackets--;
-                addChar(charStruct,str[i],1,i);
+                addChar(charStruct,str[i],1);
             } else if(str[i]=='*' || str[i]=='|'){
-                addChar(charStruct,str[i],1,i);
+                addChar(charStruct,str[i],1);
             } else{
-                addChar(charStruct,str[i],0,i);
+                addChar(charStruct,str[i],0);
             }
         }
     }
@@ -66,16 +67,22 @@ CharStruct* validateString(char* str){
         return NULL;
     }
 
-    if(c)
-
     return charStruct;
 }
 
-Parser* constructRegex(char* str){
+/**
+ * @brief Construct a parser from the regex expression which can be used to match
+ * 
+ * @param str 
+ * @return Parser* 
+ */
+Parser* constructParser(char* str){
     message[0]=0;
     CharStruct* charStruct = validateString(str);
     if(charStruct == NULL){
         return NULL;
+    } else{
+
     }
 }
 

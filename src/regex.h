@@ -8,7 +8,7 @@ typedef struct Parser Parser;
 
 CharStruct* validateString(char* str);
 
-Parser* constructRegex(char* str);
+Parser* constructParser(char* str);
 
 const char* getLastError();
 

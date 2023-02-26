@@ -14,20 +14,28 @@ void freeStack(Stack* stack){
     free(stack);
 }
 
-void stackPush(Stack* stack,char ch){
+void stackPush(Stack* stack,int i){
     if(stack->pos >= stack->size){
         realloc(stack->symbols,stack->size+5);
         stack->size += 5;
     }
-    stack->symbols[stack->pos] = ch;
+    stack->symbols[stack->pos] = i;
     stack->pos++;
 }
 
-char stackPop(Stack* stack){
-    char output=-1;
+int stackPop(Stack* stack){
+    int output=-1;
     if(!isStackEmpty(stack)){
         output = stack->symbols[stack->pos-1];
         stack->pos--;
+    }
+    return output;
+}
+
+int peekStack(Stack* stack){
+    int output=-1;
+    if(!isStackEmpty(stack)){
+        output = stack->symbols[stack->pos-1];
     }
     return output;
 }
