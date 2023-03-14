@@ -38,7 +38,7 @@ CharStruct* toPostfix(CharStruct *charStruct){
                 //add until same or higher precendence operator or () met. (right now no higher precendence then *)
                 if(getChar(charStruct,peekStack(stack)).ch != '*'){
                     stackPush(stack,i);
-                    continue;
+                    continue;1
                 }
                 while (!isStackEmpty(stack)){
                     j = stackPop(stack);
