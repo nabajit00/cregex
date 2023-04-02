@@ -1,7 +1,6 @@
 /**
  * @file postfix.c
- * @author Nabajit Upadhyaya (nabajit00.github.com)
- * @brief Shunting Yard Algorithm to convert regex expression to postfix notation 
+ * @brief Shunting Yard Algorithm to convert regex expression string to postfix notation 
  */
 #include<stdlib.h>
 #include<string.h>

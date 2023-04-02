@@ -4,12 +4,12 @@
 #include<string.h>
 #include<stdio.h>
 #include "util.h"
+#include "stack.h"
 
 char message[100];
 
 /**
  * @brief validate regex string, by recognising escaped charcter, validating brackets
- * 
  * @param str 
  * @return CharStruct* 
  */
@@ -33,7 +33,7 @@ CharStruct* validateString(char* str){
 
     for(;i<len;i++){
         if(str[i]=='/'){
-            //Escaped char next char no matter what will be no special
+            //Escaped char's next char no matter what will be no special :(
             if(i<len - 1){
                 addChar(charStruct,str[i+1],0);
                 i++;
@@ -79,11 +79,68 @@ CharStruct* validateString(char* str){
 Parser* constructParser(char* str){
     message[0]=0;
     CharStruct* charStruct = validateString(str);
+    Stack* stack;
+    Parser *p,p2;
+    int i,pop1,pop2;
+    Char charT;
     if(charStruct == NULL){
         return NULL;
     } else{
+        stack = createStack(charStruct->len);
+        Parser *parsers[charStruct->len];
+        for(i=0;i<charStruct->len;i++){
+            charT = charStruct[i];
+            if(!charT.isSpecial){
+                parsers[stack->pos] =  newSymbolParser(charT.ch);
+                stackPush(stack,stack->pos);
+            } else{
+                if(charT.ch == '|'){ //UNION
+                    pop1 = stackPop(stack);
+                    pop2 = stackPop(stack);
+                    parsers[stack->pos] = newUnionParser(parsers[pop1],parsers[pop2]);
+                    stackPush(stack->pos);
+                } else{ //charT.ch == '*' //KLEENE STAR
+                    pop1 = stackPop(stack);
+                    parsers[stack->pos] = newKleeneParser(parser[pop1]);
+                    stackPush(stack->pos);
+                }
+            }
+        }
 
+        //Concat remaining parsers in stack
+        while(!isStackEmpty(stack)){
+            p = parsers[stackPop(stack)];
+            if(!isStackEmpty(stack)){
+                p2 = parsers[stackPop(stack)];
+                p = newConcatParser(p,p2);
+            } else{
+                break;
+            }
+        }
+        p->endNode->isFinal = 1;
+        return p;
     }
+}
+
+/**
+ * @brief Match character
+ * 
+ * @param parser
+ * @param str 
+ * @return char 
+ */
+char Match(Parser *parser,char *str){
+    int len = strlen(str);
+    int pos=0;
+    Node *currNode = p->startNode;
+
+
+    
+    return currNode->isFinal;
+}
+
+char matchRec(Parser *p,char *str, int pos){
+
 }
 
 const char* getLastError(){
