@@ -15,3 +15,11 @@ void validateStringTest(){
     cs = validateString("ab*((a|b)");
     assert(cs == NULL);
 }
+
+void validateRegexParserConstruction(){
+
+}
+
+void validateRegexMatch(){
+    
+}

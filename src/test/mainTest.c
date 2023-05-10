@@ -6,4 +6,6 @@ int main(){
     testStack();
     validateStringTest();
     validatePostFix();
+    validateRegexParserConstruction();
+    validateRegexMatch();
 }

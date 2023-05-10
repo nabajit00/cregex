@@ -17,7 +17,7 @@ runTest: prebuild stack.o testStack.o mainTest.o regexTest.o regex.o char.o post
 stack.o: $(stackPath)/stack.c $(stackPath)/stack.h
 	$(CC) -c $(stackPath)/stack.c -o $(buildDir)/stack.o
 
-regex.o: $(src)/regex.c $(src)/regex.h
+regex.o: $(src)/regex.c $(src)/regex.h $(src)/regex_in.h
 	$(CC) -c $(src)/regex.c -o $(buildDir)/regex.o
 
 char.o: $(src)/char.c $(src)/char.h

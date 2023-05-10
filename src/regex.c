@@ -1,10 +1,11 @@
 #include "char.h"
 #include "regex.h"
+#include "regex_in.h"
 #include <stdlib.h>
 #include<string.h>
 #include<stdio.h>
 #include "util.h"
-#include "stack.h"
+#include "./DS/stack/stack.h"
 
 char message[100];
 
@@ -80,7 +81,7 @@ Parser* constructParser(char* str){
     message[0]=0;
     CharStruct* charStruct = validateString(str);
     Stack* stack;
-    Parser *p,p2;
+    Parser *p,*p2;
     int i,pop1,pop2;
     Char charT;
     if(charStruct == NULL){
@@ -89,7 +90,7 @@ Parser* constructParser(char* str){
         stack = createStack(charStruct->len);
         Parser *parsers[charStruct->len];
         for(i=0;i<charStruct->len;i++){
-            charT = charStruct[i];
+            charT = charStruct->chars[i];
             if(!charT.isSpecial){
                 parsers[stack->pos] =  newSymbolParser(charT.ch);
                 stackPush(stack,stack->pos);
@@ -98,11 +99,11 @@ Parser* constructParser(char* str){
                     pop1 = stackPop(stack);
                     pop2 = stackPop(stack);
                     parsers[stack->pos] = newUnionParser(parsers[pop1],parsers[pop2]);
-                    stackPush(stack->pos);
+                    stackPush(stack,stack->pos);
                 } else{ //charT.ch == '*' //KLEENE STAR
                     pop1 = stackPop(stack);
                     parsers[stack->pos] = newKleeneParser(parser[pop1]);
-                    stackPush(stack->pos);
+                    stackPush(stack,stack->pos);
                 }
             }
         }
@@ -127,22 +128,8 @@ Parser* constructParser(char* str){
  * 
  * @param parser
  * @param str 
- * @return char 
+ * @return char 1 if match 0 if not a match 
  */
 char Match(Parser *parser,char *str){
-    int len = strlen(str);
-    int pos=0;
-    Node *currNode = p->startNode;
-
-
     
-    return currNode->isFinal;
-}
-
-char matchRec(Parser *p,char *str, int pos){
-
-}
-
-const char* getLastError(){
-    return message;
 }
